@@ -23,12 +23,13 @@ public class Heat : MonoBehaviour
     public void AddToCurrentHeat(float heatValue)
     {
         currentHeat = currentHeat + math.clamp(heatValue, -maxHeat, maxHeat);
+
     }
     // Update is called once per frame
     void Update()
     {
         currentHeat = currentHeat - (heatDrainPerSecondBase + HeatDrainModifier) * Time.deltaTime;
-
+        currentHeat = math.clamp(currentHeat, 0, maxHeat);
         if (currentHeat <= 0)
         {
             Debug.Log("HEAT RAN OUT");
