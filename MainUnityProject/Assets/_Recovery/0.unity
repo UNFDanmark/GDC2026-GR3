@@ -401,7 +401,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 529597213}
-  - component: {fileID: 529597216}
   - component: {fileID: 529597212}
   - component: {fileID: 529597211}
   - component: {fileID: 529597215}
@@ -612,22 +611,6 @@ MonoBehaviour:
   moveSpeed: 10
   playerCamera: {fileID: 2134238864}
   rb: {fileID: 529597214}
---- !u!114 &529597216
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 529597210}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2d7a6316c336d7e4484be6eb05f24887, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Heat
-  maxHeat: 100
-  heatDrainPerSecondBase: 1
-  currentHeat: 0
-  HeatDrainModifier: 0
 --- !u!1 &699211585
 GameObject:
   m_ObjectHideFlags: 0
@@ -822,8 +805,8 @@ Camera:
   m_GameObject: {fileID: 784753378}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.11949676, g: 0.11949676, b: 0.11949676, a: 0}
+  m_ClearFlags: 1
+  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -963,9 +946,9 @@ NavMeshAgent:
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 240
-  m_StoppingDistance: 3
+  m_StoppingDistance: 0.2
   m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 0
+  m_AutoBraking: 1
   m_AutoRepath: 1
   m_Height: 1
   m_BaseOffset: 0.5
@@ -1077,15 +1060,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MonsterAI
   player: {fileID: 529597210}
-  pathUpdateTimer: 5
-  minimumTimeBeforeModeChange: 3
   reactionRange: 5
   hidingDistanceMinimum: 10
   hidingDistanceMaximum: 30
   distanceFromPlayer: 0
   chanceToEndHunt: 3
   chanceToEndHiding: 2
-  activePath: 0
   hunting: 0
   hiding: 0
 --- !u!1 &2134238864

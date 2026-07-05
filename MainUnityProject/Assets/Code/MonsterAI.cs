@@ -1,6 +1,7 @@
 using System;
 using Unity.Mathematics;
 using Unity.VisualScripting.Dependencies.NCalc;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.AI;
 using Random = UnityEngine.Random;
@@ -10,17 +11,21 @@ public class MonsterAI : MonoBehaviour
     [Header("Variables & References")] 
     [SerializeField] GameObject player;
 
+    [SerializeField] float pathUpdateTimer = 5f;
+    float pathTimer;
+    [SerializeField] float minimumTimeBeforeModeChange = 1f;
+    float changeCooldown;
     [SerializeField] float reactionRange = 10f;
     [SerializeField] float hidingDistanceMinimum = 20f;
     [SerializeField] float hidingDistanceMaximum = 40f;
     [SerializeField] float distanceFromPlayer;
     [Tooltip("The higher this number is the lower the chance is")][SerializeField] int chanceToEndHunt = 3;
     [Tooltip("The higher this number is the lower the chance is")][SerializeField] int chanceToEndHiding = 2;
-
     NavMeshAgent agent;
+    [SerializeField] bool activePath;
     
     //States
-    public struct Mode
+    [Serializable]public struct Mode
     {
         public static bool Hunting;
         public static bool Hiding;
@@ -36,12 +41,16 @@ public class MonsterAI : MonoBehaviour
 
     void React()
     {
-        if (Mode.Hunting)
+        Debug.Log($"Agent has path? " + agent.hasPath);
+        Debug.Log($"Hunting mode is: {Mode.Hunting}. Hiding mode is: {Mode.Hiding}");
+        if (Mode.Hunting && !agent.hasPath)
         {
+            Debug.Log("Running huntbehaviour");
             HuntBehaviour();
         }
-        else if (Mode.Hiding)
+        else if (Mode.Hiding && !agent.hasPath)
         {
+            Debug.Log("Running hidebehaviour");
             HideBehaviour();
         }
         else
@@ -51,30 +60,37 @@ public class MonsterAI : MonoBehaviour
     }
     private void HideBehaviour()
     {
+        //Current version has a chance that the hiding spot makes a path that leads right past the player, could affect scariness of monster
         Vector3 hidingPoint =
             new Vector3(player.transform.position.x + Random.Range(hidingDistanceMinimum, hidingDistanceMaximum), 0, player.transform.position.z + Random.Range(hidingDistanceMinimum, hidingDistanceMaximum));
-        agent.destination = hidingPoint;
+        agent.SetDestination(hidingPoint);
         if (Random.Range(1, chanceToEndHiding) == 1)
         {
-            Mode.Hiding = false;
-            hiding = false;
+            EnterRandomMode();
         }
     }
 
     private void HuntBehaviour()
     {
-        agent.destination = player.transform.position;
-
+        agent.SetDestination(player.transform.position);
         if (Random.Range(1, chanceToEndHunt) == 1)
         {
-            Mode.Hunting = false;
-            hunting = false;
-
+            EnterRandomMode();
         }
     }
 
     private void EnterRandomMode()
     {
+        if ((Mode.Hiding || Mode.Hunting) && changeCooldown > 0)
+        {
+            Debug.Log("Already in a mode, skipping");
+            return;
+        }
+
+        Mode.Hiding = false;
+        Mode.Hunting = false;
+        hiding = false;
+        hunting = false;
         int temp = Random.Range(0, 2);
         switch (temp)
         {
@@ -91,18 +107,32 @@ public class MonsterAI : MonoBehaviour
                 hunting = true;
                 break;
         }
+
+        changeCooldown = minimumTimeBeforeModeChange;
+        if (!agent.hasPath)
+        {
+            React();
+        }
     }
     void Update()
     {
-
+        changeCooldown = changeCooldown - Time.deltaTime;
+        pathTimer = pathTimer - Time.deltaTime;
         distanceFromPlayer = Vector3.Distance(transform.position, player.transform.position);
-        if (agent.remainingDistance <= agent.stoppingDistance)
-        {
-            agent.ResetPath();
-        }
-        if (distanceFromPlayer < reactionRange && !agent.hasPath|| agent.hasPath == false)
+        activePath = agent.hasPath;
+        if (distanceFromPlayer < reactionRange && changeCooldown <= 0)
         {
             React();
+        }
+        if (pathTimer <= 0 && !agent.hasPath)
+        {
+            React();
+            pathTimer = pathUpdateTimer;
+        }
+        if (agent.remainingDistance <= agent.stoppingDistance)
+        {
+            agent.destination = transform.position;
+            agent.ResetPath();
         }
 
     }
