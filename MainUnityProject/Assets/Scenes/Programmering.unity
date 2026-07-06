@@ -1949,7 +1949,7 @@ MonoBehaviour:
   divideStalkDistanceByXPerWaypoint: 3
   hunting: 0
   hiding: 0
-  stalking: 1
+  stalking: 0
 --- !u!1 &1252633852
 GameObject:
   m_ObjectHideFlags: 0

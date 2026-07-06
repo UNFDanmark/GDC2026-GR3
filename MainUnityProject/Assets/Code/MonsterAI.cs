@@ -22,6 +22,7 @@ public class MonsterAI : MonoBehaviour
     [SerializeField] bool activePath;
     [SerializeField] float defaultStalkDistance = 15f;
     [SerializeField] float divideStalkDistanceByXPerWaypoint = 3f;
+    [SerializeField] int destinationsReachedInCurrentMode = 0;
     float stalkDistance;
     
     float pathTimer;
@@ -70,7 +71,7 @@ public class MonsterAI : MonoBehaviour
         Vector3 hidingPoint =
             new Vector3(player.transform.position.x + Random.Range(hidingDistanceMinimum, hidingDistanceMaximum), 0, player.transform.position.z + Random.Range(hidingDistanceMinimum, hidingDistanceMaximum));
         agent.SetDestination(hidingPoint);
-        if (Random.Range(1, chanceToEndHiding) == 1)
+        if (Random.Range(1, chanceToEndHiding - destinationsReachedInCurrentMode) == 1)
         {
             EnterRandomMode();
         }
@@ -79,7 +80,7 @@ public class MonsterAI : MonoBehaviour
     private void HuntBehaviour()
     {
         agent.SetDestination(player.transform.position);
-        if (Random.Range(1, chanceToEndHunt) == 1)
+        if (Random.Range(1, chanceToEndHunt - destinationsReachedInCurrentMode) == 1)
         {
             EnterRandomMode();
         }
@@ -87,11 +88,18 @@ public class MonsterAI : MonoBehaviour
 
     private void StalkBehaviour()
     {
-        Vector3 startPos = transform.position;
         Vector3 playerPos = player.transform.position;
 
-        Vector3 waypoint1 = ReturnPointAroundPlayer(playerPos, 0, stalkDistance);
-        agent.SetDestination(waypoint1);
+        Vector3 waypoint = ReturnPointAroundPlayer(playerPos, Random.Range(0, 360), stalkDistance);
+        agent.SetDestination(waypoint);
+
+        if (destinationsReachedInCurrentMode > 2)
+        {
+            if (Random.Range(1, chanceToEndStalking - destinationsReachedInCurrentMode) == 1)
+            {
+                EnterRandomMode();
+            }
+        }
     }
 
     private Vector3 ReturnPointAroundPlayer(Vector3 pointToRotateAround, float angle, float radius)
@@ -112,6 +120,8 @@ public class MonsterAI : MonoBehaviour
         hiding = false;
         hunting = false;
         stalking = false;
+        destinationsReachedInCurrentMode = 0;
+        
         int temp = Random.Range(0, 3);
         switch (temp)
         {
@@ -158,6 +168,7 @@ public class MonsterAI : MonoBehaviour
         {
             agent.destination = transform.position;
             agent.ResetPath();
+            destinationsReachedInCurrentMode++;
         }
 
     }
