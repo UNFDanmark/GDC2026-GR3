@@ -12,6 +12,12 @@ public class PlayerMovement : MonoBehaviour
     Vector3 movementDir;
     bool isGrounded;
 
+    void Start()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+    }
+
     #region Movement
     //Function that PlayerInput component calls, edits movementDir depending on player input
     public void GetMovementInput(InputAction.CallbackContext callbackContext)

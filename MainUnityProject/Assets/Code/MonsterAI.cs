@@ -1,7 +1,6 @@
 using System;
 using Unity.Mathematics;
-using Unity.VisualScripting.Dependencies.NCalc;
-using UnityEditor.SceneManagement;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 using Random = UnityEngine.Random;
@@ -12,27 +11,33 @@ public class MonsterAI : MonoBehaviour
     [SerializeField] GameObject player;
 
     [SerializeField] float pathUpdateTimer = 5f;
-    float pathTimer;
     [SerializeField] float minimumTimeBeforeModeChange = 1f;
-    float changeCooldown;
     [SerializeField] float reactionRange = 10f;
     [SerializeField] float hidingDistanceMinimum = 20f;
     [SerializeField] float hidingDistanceMaximum = 40f;
     [SerializeField] float distanceFromPlayer;
-    [Tooltip("The higher this number is the lower the chance is")][SerializeField] int chanceToEndHunt = 3;
-    [Tooltip("The higher this number is the lower the chance is")][SerializeField] int chanceToEndHiding = 2;
-    NavMeshAgent agent;
+    [Tooltip("The higher this number is the lower the chance is")][SerializeField] int chanceToEndHunt = 5;
+    [Tooltip("The higher this number is the lower the chance is")][SerializeField] int chanceToEndHiding = 3;
+    [Tooltip("The higher this number is the lower the chance is")][SerializeField] int chanceToEndStalking = 2;
     [SerializeField] bool activePath;
+    [SerializeField] float defaultStalkDistance = 15f;
+    [SerializeField] float divideStalkDistanceByXPerWaypoint = 3f;
+    float stalkDistance;
     
+    float pathTimer;
+    float changeCooldown;
+    NavMeshAgent agent;
     //States
     [Serializable]public struct Mode
     {
         public static bool Hunting;
         public static bool Hiding;
+        public static bool Stalking;
     }
 
     [SerializeField] bool hunting;
     [SerializeField] bool hiding;
+    [SerializeField] bool stalking;
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -41,17 +46,17 @@ public class MonsterAI : MonoBehaviour
 
     void React()
     {
-        Debug.Log($"Agent has path? " + agent.hasPath);
-        Debug.Log($"Hunting mode is: {Mode.Hunting}. Hiding mode is: {Mode.Hiding}");
         if (Mode.Hunting && !agent.hasPath)
         {
-            Debug.Log("Running huntbehaviour");
             HuntBehaviour();
         }
         else if (Mode.Hiding && !agent.hasPath)
         {
-            Debug.Log("Running hidebehaviour");
             HideBehaviour();
+        }
+        else if (Mode.Stalking && !agent.hasPath)
+        {
+            StalkBehaviour();
         }
         else
         {
@@ -79,19 +84,37 @@ public class MonsterAI : MonoBehaviour
         }
     }
 
+    private void StalkBehaviour()
+    {
+        Vector3 startPos = transform.position;
+        Vector3 playerPos = player.transform.position;
+
+        Vector3 waypoint1 = ReturnPointAroundPlayer(playerPos, 0, stalkDistance);
+        Debug.Log(waypoint1);
+        agent.SetDestination(waypoint1);
+    }
+
+    private Vector3 ReturnPointAroundPlayer(Vector3 pointToRotateAround, float angle, float radius)
+    {
+        Debug.Log($"Sin of angle {angle} is equal to " + math.sin(angle));
+        Debug.Log($"Cos of angle {angle} is equal to " + math.cos(angle));
+        return new Vector3(pointToRotateAround.x + (math.cos(angle) * radius), pointToRotateAround.y,
+            pointToRotateAround.z + (math.sin(angle) * radius));
+    }
     private void EnterRandomMode()
     {
         if ((Mode.Hiding || Mode.Hunting) && changeCooldown > 0)
         {
-            Debug.Log("Already in a mode, skipping");
             return;
         }
 
         Mode.Hiding = false;
         Mode.Hunting = false;
+        Mode.Stalking = false;
         hiding = false;
         hunting = false;
-        int temp = Random.Range(0, 2);
+        stalking = false;
+        int temp = Random.Range(0, 3);
         switch (temp)
         {
             case 0:
@@ -101,6 +124,10 @@ public class MonsterAI : MonoBehaviour
             case 1:
                 Mode.Hunting = true;
                 hunting = true;
+                break;
+            case 2:
+                Mode.Stalking = true;
+                stalking = true;
                 break;
             default:
                 Mode.Hunting = true;
@@ -135,5 +162,10 @@ public class MonsterAI : MonoBehaviour
             agent.ResetPath();
         }
 
+    }
+
+    void OnDrawGizmosSelected()
+    {
+        
     }
 }
