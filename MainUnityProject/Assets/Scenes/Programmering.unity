@@ -1817,10 +1817,10 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 3.5
+  m_Speed: 5
   m_Acceleration: 8
   avoidancePriority: 50
-  m_AngularSpeed: 240
+  m_AngularSpeed: 360
   m_StoppingDistance: 3
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 0
@@ -1935,8 +1935,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MonsterAI
   player: {fileID: 529597210}
-  pathUpdateTimer: 5
-  minimumTimeBeforeModeChange: 3
+  pathUpdateTimer: 3
+  minimumTimeBeforeModeChange: 2
   reactionRange: 5
   hidingDistanceMinimum: 10
   hidingDistanceMaximum: 30
@@ -1947,6 +1947,7 @@ MonoBehaviour:
   activePath: 0
   defaultStalkDistance: 15
   divideStalkDistanceByXPerWaypoint: 3
+  destinationsReachedInCurrentMode: 0
   hunting: 0
   hiding: 0
   stalking: 0

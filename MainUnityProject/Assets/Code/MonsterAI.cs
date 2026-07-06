@@ -24,7 +24,7 @@ public class MonsterAI : MonoBehaviour
     [SerializeField] float divideStalkDistanceByXPerWaypoint = 3f;
     [SerializeField] int destinationsReachedInCurrentMode = 0;
     float stalkDistance;
-    
+    bool hasGainedNewDestination = false;
     float pathTimer;
     float changeCooldown;
     NavMeshAgent agent;
@@ -71,6 +71,7 @@ public class MonsterAI : MonoBehaviour
         Vector3 hidingPoint =
             new Vector3(player.transform.position.x + Random.Range(hidingDistanceMinimum, hidingDistanceMaximum), 0, player.transform.position.z + Random.Range(hidingDistanceMinimum, hidingDistanceMaximum));
         agent.SetDestination(hidingPoint);
+        hasGainedNewDestination = true;
         if (Random.Range(1, chanceToEndHiding - destinationsReachedInCurrentMode) == 1)
         {
             EnterRandomMode();
@@ -80,6 +81,7 @@ public class MonsterAI : MonoBehaviour
     private void HuntBehaviour()
     {
         agent.SetDestination(player.transform.position);
+        hasGainedNewDestination = true;
         if (Random.Range(1, chanceToEndHunt - destinationsReachedInCurrentMode) == 1)
         {
             EnterRandomMode();
@@ -92,7 +94,8 @@ public class MonsterAI : MonoBehaviour
 
         Vector3 waypoint = ReturnPointAroundPlayer(playerPos, Random.Range(0, 360), stalkDistance);
         agent.SetDestination(waypoint);
-
+        stalkDistance = stalkDistance / divideStalkDistanceByXPerWaypoint;
+        hasGainedNewDestination = true;
         if (destinationsReachedInCurrentMode > 2)
         {
             if (Random.Range(1, chanceToEndStalking - destinationsReachedInCurrentMode) == 1)
@@ -113,7 +116,6 @@ public class MonsterAI : MonoBehaviour
         {
             return;
         }
-
         Mode.Hiding = false;
         Mode.Hunting = false;
         Mode.Stalking = false;
@@ -121,7 +123,7 @@ public class MonsterAI : MonoBehaviour
         hunting = false;
         stalking = false;
         destinationsReachedInCurrentMode = 0;
-        
+        stalkDistance = defaultStalkDistance;
         int temp = Random.Range(0, 3);
         switch (temp)
         {
@@ -155,7 +157,7 @@ public class MonsterAI : MonoBehaviour
         pathTimer = pathTimer - Time.deltaTime;
         distanceFromPlayer = Vector3.Distance(transform.position, player.transform.position);
         activePath = agent.hasPath;
-        if (distanceFromPlayer < reactionRange && changeCooldown <= 0)
+        if (distanceFromPlayer < reactionRange && changeCooldown <= 0 && agent.pathStatus == NavMeshPathStatus.PathComplete)
         {
             React();
         }
@@ -164,8 +166,9 @@ public class MonsterAI : MonoBehaviour
             React();
             pathTimer = pathUpdateTimer;
         }
-        if (agent.remainingDistance <= agent.stoppingDistance)
+        if (agent.remainingDistance <= agent.stoppingDistance && hasGainedNewDestination)
         {
+            hasGainedNewDestination = false;
             agent.destination = transform.position;
             agent.ResetPath();
             destinationsReachedInCurrentMode++;
