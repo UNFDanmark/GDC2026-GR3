@@ -41,6 +41,7 @@ public class MonsterAI : MonoBehaviour
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
+        stalkDistance = defaultStalkDistance;
         EnterRandomMode();
     }
 
@@ -90,14 +91,11 @@ public class MonsterAI : MonoBehaviour
         Vector3 playerPos = player.transform.position;
 
         Vector3 waypoint1 = ReturnPointAroundPlayer(playerPos, 0, stalkDistance);
-        Debug.Log(waypoint1);
         agent.SetDestination(waypoint1);
     }
 
     private Vector3 ReturnPointAroundPlayer(Vector3 pointToRotateAround, float angle, float radius)
     {
-        Debug.Log($"Sin of angle {angle} is equal to " + math.sin(angle));
-        Debug.Log($"Cos of angle {angle} is equal to " + math.cos(angle));
         return new Vector3(pointToRotateAround.x + (math.cos(angle) * radius), pointToRotateAround.y,
             pointToRotateAround.z + (math.sin(angle) * radius));
     }
@@ -162,10 +160,5 @@ public class MonsterAI : MonoBehaviour
             agent.ResetPath();
         }
 
-    }
-
-    void OnDrawGizmosSelected()
-    {
-        
     }
 }

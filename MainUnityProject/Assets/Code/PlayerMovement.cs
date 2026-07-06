@@ -14,6 +14,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Start()
     {
+        Time.timeScale = 1;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
