@@ -22,6 +22,11 @@ public class UI : MonoBehaviour
     {
         Application.Quit();
     }
+
+    public void Settings()
+    {
+        
+    }
     
     
 }
