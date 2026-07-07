@@ -1,4 +1,5 @@
 using Unity.Mathematics;
+using Unity.VisualScripting.Dependencies.NCalc;
 using UnityEngine;
 
 public class Heat : MonoBehaviour
@@ -10,6 +11,8 @@ public class Heat : MonoBehaviour
 
     [SerializeField] float currentHeat;
 
+    [SerializeField] GameObject loseScreen;
+    bool dead;
     [Header("Public variables")]
     [Tooltip("Adds its value directly to heatDrainPerSecondBase, so if hDPSB is 1 and this modifier is 1, total hDPS will be 2")]
     public float HeatDrainModifier = 0f;
@@ -30,9 +33,13 @@ public class Heat : MonoBehaviour
     {
         currentHeat = currentHeat - (heatDrainPerSecondBase + HeatDrainModifier) * Time.deltaTime;
         currentHeat = math.clamp(currentHeat, 0, maxHeat);
-        if (currentHeat <= 0)
+        if (currentHeat <= 0 && !dead)
         {
-            Debug.Log("HEAT RAN OUT");
+            dead = true;
+            Time.timeScale = 0;
+            loseScreen.SetActive(true);
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
         }
     }
 }
