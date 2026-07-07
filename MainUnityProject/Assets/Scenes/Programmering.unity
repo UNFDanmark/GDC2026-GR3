@@ -9864,6 +9864,7 @@ GameObject:
   - component: {fileID: 2134238866}
   - component: {fileID: 2134238870}
   - component: {fileID: 2134238865}
+  - component: {fileID: 2134238871}
   m_Layer: 3
   m_Name: PlayerCamera
   m_TagString: Player
@@ -10041,6 +10042,14 @@ MonoBehaviour:
   AmplitudeGain: 0.4
   FrequencyGain: 1
   m_NoiseOffsets: {x: -58.89621, y: -266.67822, z: -86.23514}
+--- !u!81 &2134238871
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2134238864}
+  m_Enabled: 1
 --- !u!1 &2142761057
 GameObject:
   m_ObjectHideFlags: 0
