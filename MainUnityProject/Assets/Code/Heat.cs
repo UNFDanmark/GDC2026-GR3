@@ -11,6 +11,12 @@ public class Heat : MonoBehaviour
 
     [SerializeField] float currentHeat;
 
+    public float CurrentHeat
+    {
+        get => currentHeat;
+        private set => currentHeat = value;
+    }
+
     [SerializeField] GameObject loseScreen;
     bool dead;
     [Header("Public variables")]
