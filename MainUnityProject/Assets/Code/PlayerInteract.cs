@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class PlayerInteract : MonoBehaviour
@@ -13,21 +14,13 @@ public class PlayerInteract : MonoBehaviour
 
         if (rayHit)
         {
-            interactUI.SetActive(true);
+            if (interactTarget.transform.TryGetComponent<Iinteractable>(out var interactable))
+            {
+                interactable.Interact();
+                interactUI.SetActive(false);
+            }
         }
         
         Debug.DrawRay(cameraOrigin.position, cameraOrigin.forward, Color.red, 5);
-        try
-        {
-
-            interactTarget.transform.GetComponent<Iinteractable>().Interact();
-            interactUI.SetActive(false);
-
-        }
-        catch
-        {
-            
-        }
-  
     }
 }
