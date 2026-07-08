@@ -18,39 +18,49 @@ public class FreezeUI : MonoBehaviour
 
    void FixedUpdate()
    {
-      if (heat.CurrentHeat < 14.2857142857f)
+      if (heat.CurrentHeat < 12.8571428571f)
       {
          freeze7.SetActive(true);
          freeze6.SetActive(false);
       }
-      else if (heat.CurrentHeat < 14.285714285f * 2)
+      else if (heat.CurrentHeat < 12.8571428571f * 2)
       {
+         freeze7.SetActive(false);
          freeze6.SetActive(true);
          freeze5.SetActive(false);
       }
-      else if (heat.CurrentHeat <  14.2857142857 * 3)
+      else if (heat.CurrentHeat <  12.8571428571f * 3)
       {
+         freeze6.SetActive(false);
          freeze5.SetActive(true);
          freeze4.SetActive(false);
       }
-      else if (heat.CurrentHeat <  14.2857142857 * 4)
+      else if (heat.CurrentHeat <  12.8571428571f * 4)
       {
+         freeze5.SetActive(false);
          freeze4.SetActive(true);
          freeze3.SetActive(false);
       }
-      else if (heat.CurrentHeat <  14.2857142857 * 5)
+      else if (heat.CurrentHeat <  12.8571428571f * 5)
       {
+         freeze4.SetActive(false);
          freeze3.SetActive(true);
          freeze2.SetActive(false);
       }
-      else if (heat.CurrentHeat <  14.2857142857 * 6)
+      else if (heat.CurrentHeat <  12.8571428571f * 6)
       {
+         freeze3.SetActive(false);
          freeze2.SetActive(true);
          freeze1.SetActive(false);
       }
-      else if (heat.CurrentHeat < 14.2857142857 * 7)
+      else if (heat.CurrentHeat < 12.8571428571f * 7)
       {
+         freeze2.SetActive(false);
          freeze1.SetActive(true);
+      }
+      else if (heat.CurrentHeat > 12.85 * 7)
+      {
+         freeze1.SetActive(false);
       }
    }
 }
