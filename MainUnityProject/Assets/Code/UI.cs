@@ -5,7 +5,27 @@ public class UI : MonoBehaviour
 {
     public void Restart()
     {
-        SceneManager.LoadScene(0); //ændre dette til 1 senere når vi har fået lavet en main menu
+        SceneManager.LoadScene(1); //ændre dette til 1 senere når vi har fået lavet en main menu
+    }
+
+    public void StartGame()
+    {
+        SceneManager.LoadScene(1);
+    }
+
+    public void QuitToMenu()
+    {
+        SceneManager.LoadScene(0);
+    }
+
+    public void QuitGame()
+    {
+        Application.Quit();
+    }
+
+    public void Settings()
+    {
+        
     }
     
     

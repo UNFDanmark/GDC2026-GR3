@@ -20,9 +20,11 @@ public class MonsterAI : MonoBehaviour
     [Tooltip("The higher this number is the lower the chance is")][SerializeField] int chanceToEndHiding = 3;
     [Tooltip("The higher this number is the lower the chance is")][SerializeField] int chanceToEndStalking = 2;
     [SerializeField] bool activePath;
+    [SerializeField] bool pathPending;
     [SerializeField] float defaultStalkDistance = 15f;
     [SerializeField] float divideStalkDistanceByXPerWaypoint = 3f;
     [SerializeField] int destinationsReachedInCurrentMode = 0;
+    [SerializeField] LayerMask groundLayerMask;
     float stalkDistance;
     bool hasGainedNewDestination = false;
     float pathTimer;
@@ -67,12 +69,16 @@ public class MonsterAI : MonoBehaviour
     }
     private void HideBehaviour()
     {
+        if (pathPending)
+            return;
         //Current version has a chance that the hiding spot makes a path that leads right past the player, could affect scariness of monster
         Vector3 hidingPoint =
             new Vector3(player.transform.position.x + Random.Range(hidingDistanceMinimum, hidingDistanceMaximum), 0, player.transform.position.z + Random.Range(hidingDistanceMinimum, hidingDistanceMaximum));
+        hidingPoint = ReturnPointWithAccurateHeight(hidingPoint);
         agent.SetDestination(hidingPoint);
+        pathPending = true;
         hasGainedNewDestination = true;
-        if (Random.Range(1, chanceToEndHiding - destinationsReachedInCurrentMode) == 1)
+        if (Random.Range(1, math.clamp(chanceToEndHiding - destinationsReachedInCurrentMode, 1, chanceToEndHiding)) == 1)
         {
             EnterRandomMode();
         }
@@ -80,9 +86,12 @@ public class MonsterAI : MonoBehaviour
 
     private void HuntBehaviour()
     {
+        if (pathPending)
+            return;
         agent.SetDestination(player.transform.position);
+        pathPending = true;
         hasGainedNewDestination = true;
-        if (Random.Range(1, chanceToEndHunt - destinationsReachedInCurrentMode) == 1)
+        if (Random.Range(1, math.clamp(chanceToEndHunt - destinationsReachedInCurrentMode, 1, chanceToEndHunt)) == 1)
         {
             EnterRandomMode();
         }
@@ -90,21 +99,32 @@ public class MonsterAI : MonoBehaviour
 
     private void StalkBehaviour()
     {
+        if (pathPending)
+            return;
         Vector3 playerPos = player.transform.position;
 
         Vector3 waypoint = ReturnPointAroundPlayer(playerPos, Random.Range(0, 360), stalkDistance);
+        waypoint = ReturnPointWithAccurateHeight(waypoint);
         agent.SetDestination(waypoint);
-        stalkDistance = stalkDistance / divideStalkDistanceByXPerWaypoint;
+        pathPending = true;
+        stalkDistance = math.clamp(stalkDistance / divideStalkDistanceByXPerWaypoint, 5, stalkDistance);
         hasGainedNewDestination = true;
         if (destinationsReachedInCurrentMode > 2)
         {
-            if (Random.Range(1, chanceToEndStalking - destinationsReachedInCurrentMode) == 1)
+            if (Random.Range(1, math.clamp(chanceToEndStalking - destinationsReachedInCurrentMode, 1, chanceToEndStalking)) == 1)
             {
                 EnterRandomMode();
             }
         }
     }
 
+    private Vector3 ReturnPointWithAccurateHeight(Vector3 pointToCheck)
+    {
+        Physics.Raycast(new Vector3(pointToCheck.x, 20, pointToCheck.z), Vector3.down, out RaycastHit hit, 30f,
+            groundLayerMask);
+        Debug.DrawRay(new Vector3(pointToCheck.x, 20, pointToCheck.z), Vector3.down*30, Color.yellow, 20);
+        return hit.point;
+    }
     private Vector3 ReturnPointAroundPlayer(Vector3 pointToRotateAround, float angle, float radius)
     {
         return new Vector3(pointToRotateAround.x + (math.cos(angle) * radius), pointToRotateAround.y,
@@ -157,20 +177,25 @@ public class MonsterAI : MonoBehaviour
         pathTimer = pathTimer - Time.deltaTime;
         distanceFromPlayer = Vector3.Distance(transform.position, player.transform.position);
         activePath = agent.hasPath;
-        if (distanceFromPlayer < reactionRange && changeCooldown <= 0 && agent.pathStatus == NavMeshPathStatus.PathComplete)
+        
+        if (distanceFromPlayer < reactionRange && changeCooldown <= 0 && !agent.pathPending)
         {
+            pathPending = false;
             React();
         }
-        if (pathTimer <= 0 && !agent.hasPath)
+        if (pathTimer <= 0 && !agent.hasPath && !agent.pathPending)
         {
+            pathPending = false;
             React();
             pathTimer = pathUpdateTimer;
+            
         }
         if (agent.remainingDistance <= agent.stoppingDistance && hasGainedNewDestination)
         {
             hasGainedNewDestination = false;
             agent.destination = transform.position;
             agent.ResetPath();
+            pathPending = false;
             destinationsReachedInCurrentMode++;
         }
 
