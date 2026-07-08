@@ -66,7 +66,7 @@ public class MonsterAI : MonoBehaviour
             Mode.Hiding = false;
             Mode.Stalking = false;
             Mode.Hunting = true;
-            //noises.
+            noises.StartHuntAmbience();
             currentHunt = maxHuntTimer;
         }
         else if (Mode.Hiding && !agent.hasPath)
@@ -161,6 +161,7 @@ public class MonsterAI : MonoBehaviour
                 Mode.Hunting = true;
                 hunting = true;
                 currentHunt = maxHuntTimer;
+                noises.StartHuntAmbience();
                 break;
            // case 2:
            //     Mode.Stalking = true;
@@ -186,6 +187,7 @@ public class MonsterAI : MonoBehaviour
         {
             if (currentHunt <= 0)
             {
+                noises.EndHuntAmbience();
                 EnterRandomMode();
             }
             agent.SetDestination(player.transform.position);

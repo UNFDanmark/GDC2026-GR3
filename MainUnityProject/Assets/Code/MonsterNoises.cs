@@ -20,15 +20,15 @@ public class MonsterNoises : MonoBehaviour
     [SerializeField] AudioSource huntingScreamSource;
     [SerializeField] string[] huntingAmbiences;
     [SerializeField] string[] huntingScreams;
+    [SerializeField] string[] huntStartScreams;
     [SerializeField] float maxTimeBetweenHuntScreams = 8f;
     [SerializeField] float minTimeBetweenHuntScreams = 3f;
     [Min(0)] [SerializeField] float cooldownHuntScream;
+    bool activeHunt;
     void Start()
     {
-        if (AmbientSource == null)
-        {
-            AmbientSource = GetComponent<AudioSource>();
-        }
+        cooldownAmbientScreams = Random.Range(minTimeBetweenAmbientScreams, maxTimeBetweenAmbientScreams);
+        cooldownHuntScream = Random.Range(minTimeBetweenHuntScreams, maxTimeBetweenHuntScreams);
     }
     [ContextMenu("test")]
     public void test()
@@ -39,33 +39,44 @@ public class MonsterNoises : MonoBehaviour
     void Update()
     {
         cooldownAmbientScreams = Math.Clamp(cooldownAmbientScreams - Time.deltaTime, 0, maxTimeBetweenAmbientScreams);
-        cooldownHuntScream = Math.Clamp(cooldownHuntScream - Time.deltaTime, 0, maxTimeBetweenHuntScreams);
         if (cooldownAmbientScreams <= 0)
         {
             cooldownAmbientScreams = Random.Range(minTimeBetweenAmbientScreams, maxTimeBetweenAmbientScreams);
             PlayAmbientNoise(AmbientScreams[Random.Range(0, AmbientScreams.Length)]);
         }
 
-        if (cooldownHuntScream <= 0)
+        if (activeHunt)
         {
-            cooldownHuntScream = Random.Range(minTimeBetweenHuntScreams, maxTimeBetweenHuntScreams);
-            PlayHuntingScream(huntingScreams[Random.Range(0, huntingScreams.Length)]);
+            cooldownHuntScream = Math.Clamp(cooldownHuntScream - Time.deltaTime, 0, maxTimeBetweenHuntScreams);
+            if (cooldownHuntScream <= 0)
+            {
+                cooldownHuntScream = Random.Range(minTimeBetweenHuntScreams, maxTimeBetweenHuntScreams);
+                PlayHuntingScream(huntingScreams[Random.Range(0, huntingScreams.Length)]);
+            }
         }
     }
 
     //THIS ONE FOR START HUNT AND THEN IT LOOPS
     public void StartHuntAmbience()
     {
+        float startDuration = 0;
+        activeHunt = true;
         foreach (var noise in Sounds)
         {
-            //if (noise.Name == huntingAmbiences)
+            
+            if (noise.Name == huntStartScreams[Random.Range(0, huntStartScreams.Length)])
+            {
+                huntingAmbience.resource = noise.AudioClip;
+                startDuration = huntingAmbience.clip.length;
+                huntingAmbience.Play();
+            }
         }
         foreach (var noise in Sounds)
         {
             if (noise.Name == huntingAmbiences[Random.Range(0, huntingAmbiences.Length)])
             {
                 huntingAmbience.resource = noise.AudioClip;
-                //huntingAmbience.PlayDelayed();
+                huntingAmbience.PlayDelayed(startDuration);
             }
         }
     }

@@ -1,0 +1,82 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1233149941 &-2152698237483278724
+AudioContainerElement:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Due Ambience Full_{-2152698237483278724}
+  m_AudioClip: {fileID: 8300000, guid: 11cfa912471f8e04b8e0a890f6e44483, type: 3}
+  m_Volume: 0
+  m_Enabled: 1
+--- !u!1233149941 &570830232402665459
+AudioContainerElement:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Due Ambience 2_{570830232402665459}
+  m_AudioClip: {fileID: 8300000, guid: da0de8aa7dbd09f48b191c2e82b949db, type: 3}
+  m_Volume: 0
+  m_Enabled: 1
+--- !u!1233149941 &780374175096800375
+AudioContainerElement:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Due Ambience 1_{780374175096800375}
+  m_AudioClip: {fileID: 8300000, guid: a5ac1e77343c3a94aae3f7ac8f267acb, type: 3}
+  m_Volume: 0
+  m_Enabled: 1
+--- !u!1233149941 &2341570769559371085
+AudioContainerElement:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Due Ambience Short_{2341570769559371085}
+  m_AudioClip: {fileID: 8300000, guid: 171414c367562e140b65d59037c19e29, type: 3}
+  m_Volume: 0
+  m_Enabled: 1
+--- !u!1233149941 &4050779871366059054
+AudioContainerElement:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Due Ambience Double_{4050779871366059054}
+  m_AudioClip: {fileID: 8300000, guid: 67282a406a19dcf4a9b5d4aac6153be6, type: 3}
+  m_Volume: 0
+  m_Enabled: 1
+--- !u!1307931743 &6418180475301049370
+AudioRandomContainer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: DueAmbience
+  m_Volume: 0
+  m_Pitch: 0
+  m_AutomaticTriggerTime: 0
+  m_LoopCount: 1
+  m_VolumeRandomizationRange: {x: 0, y: 0}
+  m_PitchRandomizationRange: {x: -200, y: 200}
+  m_AutomaticTriggerTimeRandomizationRange: {x: 0, y: 0}
+  m_LoopCountRandomizationRange: {x: 0, y: 0}
+  m_Elements:
+  - {fileID: 780374175096800375}
+  - {fileID: 570830232402665459}
+  - {fileID: 4050779871366059054}
+  - {fileID: -2152698237483278724}
+  - {fileID: 2341570769559371085}
+  m_AvoidRepeatingLast: 1
+  m_PlaybackMode: 2
+  m_TriggerMode: 0
+  m_AutomaticTriggerMode: 1
+  m_LoopMode: 2
+  m_VolumeRandomizationEnabled: 0
+  m_PitchRandomizationEnabled: 1
+  m_AutomaticTriggerTimeRandomizationEnabled: 0
+  m_LoopCountRandomizationEnabled: 0
