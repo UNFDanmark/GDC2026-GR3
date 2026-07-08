@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 3
   tags:
   - InteractableObject
+  - Monster
   layers:
   - Default
   - TransparentFX
