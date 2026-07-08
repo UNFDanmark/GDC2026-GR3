@@ -27,8 +27,12 @@ public class MonsterAI : MonoBehaviour
     [SerializeField] LayerMask groundLayerMask;
     [SerializeField] float maxHuntTimer = 20;
     [SerializeField] float huntSpeedBoost = 5f;
+    [SerializeField] float stickDestroyTime = 5;
+    public bool StickActive;
+    public Transform StickPosition;
     float stalkDistance;
     bool hasGainedNewDestination = false;
+    float stickTimer;
     float pathTimer;
     float changeCooldown;
     [SerializeField] float currentHunt;
@@ -173,14 +177,35 @@ public class MonsterAI : MonoBehaviour
     void Update()
     {
         currentHunt = currentHunt - Time.deltaTime;
-        if (Mode.Hunting)
+
+        if (Mode.Hunting && !StickActive)
         {
             if (currentHunt <= 0)
             {
                 EnterRandomMode();
             }
             agent.SetDestination(player.transform.position);
-            hasGainedNewDestination = true;
+        }
+
+        agent.autoBraking = false;
+        if (StickActive)
+        {
+            if (StickPosition == null)
+                return;
+            agent.autoBraking = true;
+            agent.SetDestination(StickPosition.position);
+            if (agent.remainingDistance < agent.stoppingDistance)
+            {
+                stickTimer = stickTimer - Time.deltaTime;
+                if (stickTimer <= 0)
+                {
+                    Destroy(StickPosition.gameObject);
+                    stickTimer = stickDestroyTime;
+                    agent.ResetPath();
+                }
+            }
+
+            return;
         }
         changeCooldown = changeCooldown - Time.deltaTime;
         pathTimer = pathTimer - Time.deltaTime;

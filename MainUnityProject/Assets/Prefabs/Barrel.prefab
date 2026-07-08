@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4805241641229262085}
   - component: {fileID: 342777200106529559}
   - component: {fileID: 1290972956957797582}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -141,9 +141,10 @@ GameObject:
   - component: {fileID: 1352711789982948565}
   - component: {fileID: 5588088989476145214}
   - component: {fileID: 3976175598784996240}
-  m_Layer: 0
+  - component: {fileID: 142165170954594550}
+  m_Layer: 7
   m_Name: Barrel
-  m_TagString: Untagged
+  m_TagString: InteractableObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
@@ -5025,6 +5026,18 @@ ParticleSystemRenderer:
   m_MeshWeighting1: 1
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
+--- !u!114 &142165170954594550
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4440094301183134747}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc6b951b40c22a4468a6c725e52e0631, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BarrelGiveStick
 --- !u!1001 &8530292296588050934
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5090,6 +5103,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -5568371526223589888, guid: 2cc31e3e605b0584b9d7d1be80a39be3, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: -5568371526223589888, guid: 2cc31e3e605b0584b9d7d1be80a39be3, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
@@ -5098,8 +5115,16 @@ PrefabInstance:
       value: barrel
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 2cc31e3e605b0584b9d7d1be80a39be3, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 2cc31e3e605b0584b9d7d1be80a39be3, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 8513859187771203891, guid: 2cc31e3e605b0584b9d7d1be80a39be3, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 8513859187771203891, guid: 2cc31e3e605b0584b9d7d1be80a39be3, type: 3}
       propertyPath: m_StaticEditorFlags
