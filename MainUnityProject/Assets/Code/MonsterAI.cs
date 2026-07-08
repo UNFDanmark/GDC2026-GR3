@@ -25,10 +25,13 @@ public class MonsterAI : MonoBehaviour
     [SerializeField] float divideStalkDistanceByXPerWaypoint = 3f;
     [SerializeField] int destinationsReachedInCurrentMode = 0;
     [SerializeField] LayerMask groundLayerMask;
+    [SerializeField] float maxHuntTimer = 20;
+    [SerializeField] float huntSpeedBoost = 5f;
     float stalkDistance;
     bool hasGainedNewDestination = false;
     float pathTimer;
     float changeCooldown;
+    [SerializeField] float currentHunt;
     NavMeshAgent agent;
     //States
     [Serializable]public struct Mode
@@ -48,21 +51,25 @@ public class MonsterAI : MonoBehaviour
         EnterRandomMode();
     }
 
-    void React()
+    void React(bool tooClose)
     {
-        if (Mode.Hunting && !agent.hasPath)
+        if (tooClose)
         {
-            HuntBehaviour();
+            agent.speed = math.clamp(agent.speed + huntSpeedBoost, 10, 15);
+            Mode.Hiding = false;
+            Mode.Stalking = false;
+            Mode.Hunting = true;
+            currentHunt = maxHuntTimer;
         }
         else if (Mode.Hiding && !agent.hasPath)
         {
             HideBehaviour();
         }
-        else if (Mode.Stalking && !agent.hasPath)
-        {
-            StalkBehaviour();
-        }
-        else
+       //else if (Mode.Stalking && !agent.hasPath)
+       //{
+       //    StalkBehaviour();
+       //}
+       //else
         {
             EnterRandomMode();
         }
@@ -83,40 +90,28 @@ public class MonsterAI : MonoBehaviour
             EnterRandomMode();
         }
     }
+    
 
-    private void HuntBehaviour()
-    {
-        if (pathPending)
-            return;
-        agent.SetDestination(player.transform.position);
-        pathPending = true;
-        hasGainedNewDestination = true;
-        if (Random.Range(1, math.clamp(chanceToEndHunt - destinationsReachedInCurrentMode, 1, chanceToEndHunt)) == 1)
-        {
-            EnterRandomMode();
-        }
-    }
+  //private void StalkBehaviour()
+  //{
+  //    if (pathPending)
+  //        return;
+  //    Vector3 playerPos = player.transform.position;
 
-    private void StalkBehaviour()
-    {
-        if (pathPending)
-            return;
-        Vector3 playerPos = player.transform.position;
-
-        Vector3 waypoint = ReturnPointAroundPlayer(playerPos, Random.Range(0, 360), stalkDistance);
-        waypoint = ReturnPointWithAccurateHeight(waypoint);
-        agent.SetDestination(waypoint);
-        pathPending = true;
-        stalkDistance = math.clamp(stalkDistance / divideStalkDistanceByXPerWaypoint, 5, stalkDistance);
-        hasGainedNewDestination = true;
-        if (destinationsReachedInCurrentMode > 2)
-        {
-            if (Random.Range(1, math.clamp(chanceToEndStalking - destinationsReachedInCurrentMode, 1, chanceToEndStalking)) == 1)
-            {
-                EnterRandomMode();
-            }
-        }
-    }
+  //    Vector3 waypoint = ReturnPointAroundPlayer(playerPos, Random.Range(0, 360), stalkDistance);
+  //    waypoint = ReturnPointWithAccurateHeight(waypoint);
+  //    agent.SetDestination(waypoint);
+  //    pathPending = true;
+  //    stalkDistance = math.clamp(stalkDistance / divideStalkDistanceByXPerWaypoint, 5, stalkDistance);
+  //    hasGainedNewDestination = true;
+  //    if (destinationsReachedInCurrentMode > 2)
+  //    {
+  //        if (Random.Range(1, math.clamp(chanceToEndStalking - destinationsReachedInCurrentMode, 1, chanceToEndStalking)) == 1)
+  //        {
+  //            EnterRandomMode();
+  //        }
+  //    }
+  //}
 
     private Vector3 ReturnPointWithAccurateHeight(Vector3 pointToCheck)
     {
@@ -136,6 +131,8 @@ public class MonsterAI : MonoBehaviour
         {
             return;
         }
+        if (Mode.Hunting)
+            agent.speed = math.clamp(agent.speed - huntSpeedBoost, 10, 15);
         Mode.Hiding = false;
         Mode.Hunting = false;
         Mode.Stalking = false;
@@ -152,13 +149,15 @@ public class MonsterAI : MonoBehaviour
                 hiding = true;
                 break;
             case 1:
+                agent.speed = math.clamp(agent.speed + huntSpeedBoost, 10, 15);
                 Mode.Hunting = true;
                 hunting = true;
+                currentHunt = maxHuntTimer;
                 break;
-            case 2:
-                Mode.Stalking = true;
-                stalking = true;
-                break;
+           // case 2:
+           //     Mode.Stalking = true;
+           //     stalking = true;
+           //     break;
             default:
                 Mode.Hunting = true;
                 hunting = true;
@@ -168,25 +167,36 @@ public class MonsterAI : MonoBehaviour
         changeCooldown = minimumTimeBeforeModeChange;
         if (!agent.hasPath)
         {
-            React();
+            React(false);
         }
     }
     void Update()
     {
+        currentHunt = currentHunt - Time.deltaTime;
+        if (Mode.Hunting)
+        {
+            if (currentHunt <= 0)
+            {
+                EnterRandomMode();
+            }
+            agent.SetDestination(player.transform.position);
+            hasGainedNewDestination = true;
+        }
         changeCooldown = changeCooldown - Time.deltaTime;
         pathTimer = pathTimer - Time.deltaTime;
         distanceFromPlayer = Vector3.Distance(transform.position, player.transform.position);
         activePath = agent.hasPath;
         
-        if (distanceFromPlayer < reactionRange && changeCooldown <= 0 && !agent.pathPending)
+        if (distanceFromPlayer < reactionRange && changeCooldown <= 0)
         {
-            pathPending = false;
-            React();
+            Debug.Log("Player too close, hunting");
+            agent.ResetPath();
+            React(true);
         }
         if (pathTimer <= 0 && !agent.hasPath && !agent.pathPending)
         {
             pathPending = false;
-            React();
+            React(false);
             pathTimer = pathUpdateTimer;
             
         }

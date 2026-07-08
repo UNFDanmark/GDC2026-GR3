@@ -3690,13 +3690,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1001540625}
+  - component: {fileID: 1001540626}
   - component: {fileID: 1001540627}
   - component: {fileID: 1001540624}
   - component: {fileID: 1001540623}
   - component: {fileID: 1001540622}
   - component: {fileID: 1001540621}
   - component: {fileID: 1001540630}
-  - component: {fileID: 1001540626}
   - component: {fileID: 1001540628}
   - component: {fileID: 1001540629}
   m_Layer: 0
@@ -3716,11 +3716,11 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 5
-  m_Acceleration: 8
+  m_Speed: 10
+  m_Acceleration: 15
   avoidancePriority: 50
-  m_AngularSpeed: 360
-  m_StoppingDistance: 3
+  m_AngularSpeed: 1080
+  m_StoppingDistance: 0.2
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 0
   m_AutoRepath: 1
@@ -3836,21 +3836,24 @@ MonoBehaviour:
   player: {fileID: 529597210}
   pathUpdateTimer: 3
   minimumTimeBeforeModeChange: 2
-  reactionRange: 5
-  hidingDistanceMinimum: 10
-  hidingDistanceMaximum: 30
+  reactionRange: 10
+  hidingDistanceMinimum: 30
+  hidingDistanceMaximum: 80
   distanceFromPlayer: 0
   chanceToEndHunt: 3
   chanceToEndHiding: 2
   chanceToEndStalking: 2
   activePath: 0
   pathPending: 0
-  defaultStalkDistance: 15
+  defaultStalkDistance: 30
   divideStalkDistanceByXPerWaypoint: 3
   destinationsReachedInCurrentMode: 0
   groundLayerMask:
     serializedVersion: 2
     m_Bits: 64
+  maxHuntTimer: 20
+  huntSpeedBoost: 5
+  currentHunt: 0
   hunting: 0
   hiding: 0
   stalking: 0
