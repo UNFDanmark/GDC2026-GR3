@@ -5,13 +5,13 @@ using UnityEngine.Audio;
 
 public class AmbientSounds : MonoBehaviour
 {
-    [SerializeField] SoundContainer[] sounds;
+    [SerializeField] AudioClipContainer[] sounds;
 
 }
 [Serializable]
-public class SoundContainer
+public class AudioClipContainer
 {
-    public AudioClip AudioClip;
+    public AudioResource AudioClip;
     public string Name;
 }
 
