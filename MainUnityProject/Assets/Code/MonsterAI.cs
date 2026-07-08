@@ -10,6 +10,8 @@ public class MonsterAI : MonoBehaviour
     [Header("Variables & References")] 
     [SerializeField] GameObject player;
 
+    [SerializeField] MonsterNoises noises;
+
     [SerializeField] float pathUpdateTimer = 5f;
     [SerializeField] float minimumTimeBeforeModeChange = 1f;
     [SerializeField] float reactionRange = 10f;
@@ -51,6 +53,7 @@ public class MonsterAI : MonoBehaviour
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
+        noises = GetComponent<MonsterNoises>();
         stalkDistance = defaultStalkDistance;
         EnterRandomMode();
     }
@@ -63,6 +66,7 @@ public class MonsterAI : MonoBehaviour
             Mode.Hiding = false;
             Mode.Stalking = false;
             Mode.Hunting = true;
+            //noises.
             currentHunt = maxHuntTimer;
         }
         else if (Mode.Hiding && !agent.hasPath)
