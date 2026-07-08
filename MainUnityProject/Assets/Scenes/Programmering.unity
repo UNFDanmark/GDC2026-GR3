@@ -1821,7 +1821,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1704424312}
   - {fileID: 699211586}
   - {fileID: 1170253951}
   m_Father: {fileID: 0}
@@ -1912,7 +1911,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 0}
+  m_Resource: {fileID: 6418180475301049370, guid: 98e43357faa08f44088ff80504338383, type: 2}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
@@ -6711,6 +6710,7 @@ GameObject:
   - component: {fileID: 1704424312}
   - component: {fileID: 1704424314}
   - component: {fileID: 1704424313}
+  - component: {fileID: 1704424315}
   m_Layer: 3
   m_Name: Snow
   m_TagString: Untagged
@@ -6727,11 +6727,11 @@ Transform:
   m_GameObject: {fileID: 1704424311}
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 10, z: 0}
+  m_LocalPosition: {x: 505.09998, y: 10.41, z: 277}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 529597213}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!199 &1704424313
 ParticleSystemRenderer:
@@ -7527,8 +7527,8 @@ ParticleSystem:
     m_TextureColorAffectsParticles: 1
     m_TextureAlphaAffectsParticles: 1
     m_TextureBilinearFiltering: 0
-    randomDirectionAmount: 0.06
-    sphericalDirectionAmount: 0.04
+    randomDirectionAmount: 0.1
+    sphericalDirectionAmount: 0
     randomPositionAmount: 0
     radius:
       value: 1
@@ -7650,7 +7650,7 @@ ParticleSystem:
     rateOverTime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 40
+      scalar: 120
       minScalar: 10
       maxCurve:
         serializedVersion: 2
@@ -8271,11 +8271,11 @@ ParticleSystem:
     flipU: 0
     flipV: 0
   VelocityModule:
-    enabled: 0
+    enabled: 1
     x:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0
+      scalar: -13.48
       minScalar: 0
       maxCurve:
         serializedVersion: 2
@@ -8805,7 +8805,7 @@ ParticleSystem:
     speedModifier:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 3.45
+      scalar: 4.3
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -11537,6 +11537,22 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     vectorLabel1_3: W
+--- !u!114 &1704424315
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1704424311}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80b83cbe0581d16438103c730b2ac575, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SnowCloudManager
+  playerTransform: {fileID: 529597213}
+  xOffset: 35
+  yOffset: 15
+  zOffset: 0
 --- !u!1001 &1800277901
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13293,6 +13309,7 @@ SceneRoots:
   - {fileID: 410087041}
   - {fileID: 832575519}
   - {fileID: 2134238869}
+  - {fileID: 1704424312}
   - {fileID: 529597213}
   - {fileID: 466539015}
   - {fileID: 1001540625}
