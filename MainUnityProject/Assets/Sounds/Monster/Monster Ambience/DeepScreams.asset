@@ -1,5 +1,15 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1233149941 &-6678986778679893552
+AudioContainerElement:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Deep Monster Scream 4_{-6678986778679893552}
+  m_AudioClip: {fileID: 8300000, guid: 173fd08f2f747be488ef0e2b911ff9d3, type: 3}
+  m_Volume: 0
+  m_Enabled: 1
 --- !u!1233149941 &-4600845884115830728
 AudioContainerElement:
   m_ObjectHideFlags: 1
@@ -49,6 +59,7 @@ AudioRandomContainer:
   - {fileID: 954878307669413415}
   - {fileID: -249193572870115547}
   - {fileID: -4600845884115830728}
+  - {fileID: -6678986778679893552}
   m_AvoidRepeatingLast: 1
   m_PlaybackMode: 2
   m_TriggerMode: 0
