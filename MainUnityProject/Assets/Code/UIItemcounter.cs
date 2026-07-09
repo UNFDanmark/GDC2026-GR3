@@ -9,9 +9,11 @@ public class UIItemcounter : MonoBehaviour
 
   void FixedUpdate()
   {
-    score.text = $"Pictures collected {ItemCounter.score}/5";
+    score.text = $"Pictures collected {Math.Clamp(ItemCounter.Score, 0, 5)}/5";
 
-    if (ItemCounter.score >= 5) // checks if the player has won :)
+    if (ItemCounter.Score == 5)
+      ItemCounter.Score++;
+    if (ItemCounter.Score >= 6) // checks if the player has won :)
     {
       Time.timeScale = 0;
       
@@ -19,7 +21,7 @@ public class UIItemcounter : MonoBehaviour
       Cursor.visible = true;
       winScreen.SetActive(true);
 
-      ItemCounter.score = 0;
+      ItemCounter.Score = 0;
     }
     
   }

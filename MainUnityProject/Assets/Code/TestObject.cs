@@ -12,8 +12,8 @@ public class TestObject : MonoBehaviour, Iinteractable
         interactUI.SetActive(false);
         
         Destroy(gameObject);
-        ItemCounter.score += 1;
+        ItemCounter.Score += 1;
 
-        print(ItemCounter.score);
+        print(ItemCounter.Score);
     }
 }
