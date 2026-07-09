@@ -23,7 +23,7 @@ public class TorchHandler : MonoBehaviour
 
     public void StickThrow(InputAction.CallbackContext ctx)
     {
-        if (ctx.started && hasTorch)
+        if (ctx.started && hasTorch && !ItemCounter.inPicture)
         {
             var temp = Instantiate(torchPrefab, transform.position, transform.rotation);
             temp.GetComponent<Rigidbody>().linearVelocity = new Vector3(transform.forward.x*5, transform.forward.y+1*2, transform.forward.z*5);
