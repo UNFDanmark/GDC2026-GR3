@@ -39,6 +39,7 @@ public class MonsterNoises : MonoBehaviour
     void Update()
     {
         cooldownAmbientScreams = Math.Clamp(cooldownAmbientScreams - Time.deltaTime, 0, maxTimeBetweenAmbientScreams);
+        cooldownHuntScream = Math.Clamp(cooldownHuntScream - Time.deltaTime, 0, maxTimeBetweenHuntScreams);
         if (cooldownAmbientScreams <= 0)
         {
             cooldownAmbientScreams = Random.Range(minTimeBetweenAmbientScreams, maxTimeBetweenAmbientScreams);
@@ -47,7 +48,7 @@ public class MonsterNoises : MonoBehaviour
 
         if (activeHunt)
         {
-            cooldownHuntScream = Math.Clamp(cooldownHuntScream - Time.deltaTime, 0, maxTimeBetweenHuntScreams);
+
             if (cooldownHuntScream <= 0)
             {
                 cooldownHuntScream = Random.Range(minTimeBetweenHuntScreams, maxTimeBetweenHuntScreams);
@@ -59,6 +60,13 @@ public class MonsterNoises : MonoBehaviour
     //THIS ONE FOR START HUNT AND THEN IT LOOPS
     public void StartHuntAmbience()
     {
+        if (activeHunt)
+        {
+            return;
+        }
+        if (cooldownHuntScream > 0)
+            return;
+        cooldownHuntScream = Random.Range(minTimeBetweenHuntScreams, maxTimeBetweenHuntScreams);
         Debug.Log("HUNT MUSIC SHOULD BE PLAYING");
         activeHunt = true;
         foreach (var noise in Sounds)
@@ -91,8 +99,8 @@ public class MonsterNoises : MonoBehaviour
         {
             if (name == noise.Name)
             {
-                huntingAmbience.resource = noise.AudioClip;
-                huntingAmbience.Play();
+                huntingScreamSource.resource = noise.AudioClip;
+                huntingScreamSource.Play();
             }
         }
     }
