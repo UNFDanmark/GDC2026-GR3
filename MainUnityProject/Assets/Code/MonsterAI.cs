@@ -64,7 +64,7 @@ public class MonsterAI : MonoBehaviour
         if (tooClose || Mode.Hunting)
         {
             agent.speed = math.clamp(agent.speed + huntSpeedBoost, 10, 15);
-            animator.SetBool("isRunning", true);
+            //animator.SetBool("isRunning", true);
             Mode.Hiding = false;
             Mode.Stalking = false;
             Mode.Hunting = true;
@@ -91,7 +91,7 @@ public class MonsterAI : MonoBehaviour
         Vector3 hidingPoint =
             new Vector3(player.transform.position.x + Random.Range(hidingDistanceMinimum, hidingDistanceMaximum), 0, player.transform.position.z + Random.Range(hidingDistanceMinimum, hidingDistanceMaximum));
         hidingPoint = ReturnPointWithAccurateHeight(hidingPoint);
-        animator.SetBool("isMoving", true);
+        //animator.SetBool("isMoving", true);
         agent.SetDestination(hidingPoint);
         pathPending = true;
         hasGainedNewDestination = true;
@@ -145,7 +145,7 @@ public class MonsterAI : MonoBehaviour
         if (Mode.Hunting)
         {
             agent.speed = math.clamp(agent.speed - huntSpeedBoost, 10, 15);
-            animator.SetBool("isRunning", false);
+            //animator.SetBool("isRunning", false);
         }
 
         Mode.Hiding = false;
@@ -166,7 +166,7 @@ public class MonsterAI : MonoBehaviour
                 break;
             case 1:
                 agent.speed = math.clamp(agent.speed + huntSpeedBoost, 10, 15);
-                animator.SetBool("isRunning", true);
+                //animator.SetBool("isRunning", true);
                 Mode.Hunting = true;
                 hunting = true;
                 currentHunt = maxHuntTimer;
@@ -191,16 +191,16 @@ public class MonsterAI : MonoBehaviour
     void Update()
     {
         currentHunt = currentHunt - Time.deltaTime;
-
+        animator.SetFloat("Speed", agent.velocity.magnitude);
         if (Mode.Hunting && !StickActive)
         {
             if (currentHunt <= 0)
             {
                 noises.EndHuntAmbience();
-                animator.SetBool("isRunning", false);
+                //animator.SetBool("isRunning", false);
                 EnterRandomMode();
             }
-            animator.SetBool("isMoving", true);
+            //nimator.SetBool("isMoving", true);
             agent.SetDestination(player.transform.position);
         }
 
@@ -211,7 +211,7 @@ public class MonsterAI : MonoBehaviour
             if (StickPosition == null)
                 return;
             agent.autoBraking = true;
-            animator.SetBool("isMoving", true);
+            //animator.SetBool("isMoving", true);
             agent.SetDestination(StickPosition.position);
             if (agent.remainingDistance < agent.stoppingDistance)
             {
