@@ -6,6 +6,7 @@ public class BarrelGiveStick : MonoBehaviour, Iinteractable
     bool hasStick;
     [SerializeField] float replenishTimer = 10f;
     float cooldown;
+    [SerializeField] AudioSource pickUpNoise;
 
     public void Interact()
     {
@@ -13,6 +14,7 @@ public class BarrelGiveStick : MonoBehaviour, Iinteractable
             return;
         TorchHandler.instance.EnableStick();
         hasStick = false;
+        pickUpNoise.Play();
         cooldown = replenishTimer;
     }
 

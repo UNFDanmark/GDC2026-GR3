@@ -82,6 +82,7 @@ public class MonsterNoises : MonoBehaviour
 
     public void EndHuntAmbience()
     {
+        activeHunt = false;
         huntingAmbience.Stop();
     }
     public void PlayHuntingScream(string name)
