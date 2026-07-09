@@ -3,6 +3,8 @@ using UnityEngine.SceneManagement;
 
 public class UI : MonoBehaviour
 {
+    public GameObject[] pictures;
+    
     public void Restart()
     {
         SceneManager.LoadScene(1); //ændre dette til 1 senere når vi har fået lavet en main menu
@@ -22,7 +24,7 @@ public class UI : MonoBehaviour
     {
         Application.Quit();
     }
-
+    
     public void Settings()
     {
         
