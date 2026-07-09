@@ -173,8 +173,11 @@ public class MonsterAI : MonoBehaviour
                 Mode.Hunting = true;
                 hunting = true;
                 if (!soundPlayedThisHunt)
-                     currentHunt = maxHuntTimer;
-                noises.StartHuntAmbience();
+                {
+                    currentHunt = maxHuntTimer;
+                    noises.StartHuntAmbience();
+                }
+
                 break;
            // case 2:
            //     Mode.Stalking = true;
