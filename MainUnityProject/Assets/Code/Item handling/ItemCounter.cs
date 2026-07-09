@@ -11,8 +11,11 @@ public class ItemCounter : MonoBehaviour
    {
       inPicture = false;
       score = 0;
+      scoreUpdated = null;
       scoreUpdated += showPic;
+      
    }
+   
 
    static Action<int> scoreUpdated;
    static int score = 0;

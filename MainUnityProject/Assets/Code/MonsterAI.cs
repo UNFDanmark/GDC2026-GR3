@@ -31,6 +31,7 @@ public class MonsterAI : MonoBehaviour
     [SerializeField] float huntSpeedBoost = 5f;
     [SerializeField] float stickDestroyTime = 5;
     [SerializeField] Animator animator;
+    [SerializeField] bool soundPlayedThisHunt = false;
     public bool StickActive;
     public Transform StickPosition;
     float stalkDistance;
@@ -61,27 +62,29 @@ public class MonsterAI : MonoBehaviour
 
     void React(bool tooClose)
     {
-        if (tooClose || Mode.Hunting)
-        {
-            agent.speed = math.clamp(agent.speed + huntSpeedBoost, 10, 15);
-            //animator.SetBool("isRunning", true);
-            Mode.Hiding = false;
-            Mode.Stalking = false;
-            Mode.Hunting = true;
-            currentHunt = maxHuntTimer;
-        }
-        else if (Mode.Hiding && !agent.hasPath)
-        {
-            HideBehaviour();
-        }
-       //else if (Mode.Stalking && !agent.hasPath)
-       //{
-       //    StalkBehaviour();
-       //}
-       //else
-        {
-            EnterRandomMode();
-        }
+         if (Mode.Hiding && !agent.hasPath)
+         {
+             HideBehaviour();
+         }
+         else if (tooClose || Mode.Hunting)
+         {
+             agent.speed = math.clamp(agent.speed + huntSpeedBoost, 10, 15);
+             //animator.SetBool("isRunning", true);
+             Mode.Hiding = false;
+             Mode.Stalking = false;
+             Mode.Hunting = true;
+             if (!soundPlayedThisHunt)
+                 currentHunt = maxHuntTimer;
+         }
+
+         //else if (Mode.Stalking && !agent.hasPath)
+         //{
+         //    StalkBehaviour();
+         //}
+         //else
+         {
+             EnterRandomMode();
+         }
     }
     private void HideBehaviour()
     {
@@ -156,7 +159,7 @@ public class MonsterAI : MonoBehaviour
         stalking = false;
         destinationsReachedInCurrentMode = 0;
         stalkDistance = defaultStalkDistance;
-        int temp = Random.Range(0, 3);
+        int temp = Random.Range(0, 2);
         switch (temp)
         {
             case 0:
@@ -169,7 +172,8 @@ public class MonsterAI : MonoBehaviour
                 //animator.SetBool("isRunning", true);
                 Mode.Hunting = true;
                 hunting = true;
-                currentHunt = maxHuntTimer;
+                if (!soundPlayedThisHunt)
+                     currentHunt = maxHuntTimer;
                 noises.StartHuntAmbience();
                 break;
            // case 2:
@@ -197,10 +201,18 @@ public class MonsterAI : MonoBehaviour
             if (currentHunt <= 0)
             {
                 noises.EndHuntAmbience();
+                soundPlayedThisHunt = false;
                 //animator.SetBool("isRunning", false);
+                agent.ResetPath();
                 EnterRandomMode();
             }
             //nimator.SetBool("isMoving", true);
+            if (!soundPlayedThisHunt)
+            {
+                noises.StartHuntAmbience();
+                soundPlayedThisHunt = true;
+            }
+
             agent.SetDestination(player.transform.position);
         }
 
@@ -211,6 +223,8 @@ public class MonsterAI : MonoBehaviour
             if (StickPosition == null)
                 return;
             agent.autoBraking = true;
+            noises.EndHuntAmbience();
+            soundPlayedThisHunt = false;
             //animator.SetBool("isMoving", true);
             agent.SetDestination(StickPosition.position);
             if (agent.remainingDistance < agent.stoppingDistance)
