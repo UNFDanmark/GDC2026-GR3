@@ -7,6 +7,7 @@ public class UI : MonoBehaviour
     
     public void Restart()
     {
+        ItemCounter.Score = 0;
         SceneManager.LoadScene(1); //ændre dette til 1 senere når vi har fået lavet en main menu
     }
 

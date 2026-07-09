@@ -59,16 +59,15 @@ public class MonsterNoises : MonoBehaviour
     //THIS ONE FOR START HUNT AND THEN IT LOOPS
     public void StartHuntAmbience()
     {
-        float startDuration = 0;
+        Debug.Log("HUNT MUSIC SHOULD BE PLAYING");
         activeHunt = true;
         foreach (var noise in Sounds)
         {
             
             if (noise.Name == huntStartScreams[Random.Range(0, huntStartScreams.Length)])
             {
-                huntingAmbience.resource = noise.AudioClip;
-                startDuration = huntingAmbience.clip.length;
-                huntingAmbience.Play();
+                huntingScreamSource.resource = noise.AudioClip;
+                huntingScreamSource.Play();
             }
         }
         foreach (var noise in Sounds)
@@ -76,7 +75,7 @@ public class MonsterNoises : MonoBehaviour
             if (noise.Name == huntingAmbiences[Random.Range(0, huntingAmbiences.Length)])
             {
                 huntingAmbience.resource = noise.AudioClip;
-                huntingAmbience.PlayDelayed(startDuration);
+                huntingAmbience.Play();
             }
         }
     }
