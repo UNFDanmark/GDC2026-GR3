@@ -1,0 +1,71 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1233149941 &-8086239445180291391
+AudioContainerElement:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Monster_Footstep_4_{-8086239445180291391}
+  m_AudioClip: {fileID: 8300000, guid: c40688653170f864f97d465a1eb49d4b, type: 3}
+  m_Volume: 0
+  m_Enabled: 1
+--- !u!1233149941 &-822586917513655154
+AudioContainerElement:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Monster_Footstep_3_{-822586917513655154}
+  m_AudioClip: {fileID: 8300000, guid: 4c4daa52d632fbd4faa8d6ebd9f4cdde, type: 3}
+  m_Volume: 0
+  m_Enabled: 1
+--- !u!1233149941 &4221030901034082119
+AudioContainerElement:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Monster_Footstep_2_{4221030901034082119}
+  m_AudioClip: {fileID: 8300000, guid: e94a711d0379ecc4eb5355cb8341318b, type: 3}
+  m_Volume: 0
+  m_Enabled: 1
+--- !u!1307931743 &6418180475301049370
+AudioRandomContainer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: MonsterFootsStepRandomPitch
+  m_Volume: 0
+  m_Pitch: 0
+  m_AutomaticTriggerTime: 0.5
+  m_LoopCount: 1
+  m_VolumeRandomizationRange: {x: 0, y: 0}
+  m_PitchRandomizationRange: {x: -100, y: 100}
+  m_AutomaticTriggerTimeRandomizationRange: {x: 0, y: 0}
+  m_LoopCountRandomizationRange: {x: 0, y: 0}
+  m_Elements:
+  - {fileID: 8298368837534716986}
+  - {fileID: 4221030901034082119}
+  - {fileID: -822586917513655154}
+  - {fileID: -8086239445180291391}
+  m_AvoidRepeatingLast: 1
+  m_PlaybackMode: 2
+  m_TriggerMode: 1
+  m_AutomaticTriggerMode: 0
+  m_LoopMode: 0
+  m_VolumeRandomizationEnabled: 0
+  m_PitchRandomizationEnabled: 1
+  m_AutomaticTriggerTimeRandomizationEnabled: 0
+  m_LoopCountRandomizationEnabled: 0
+--- !u!1233149941 &8298368837534716986
+AudioContainerElement:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Monster_Footstep_1_{8298368837534716986}
+  m_AudioClip: {fileID: 8300000, guid: 078016f43f7688243812b7ab730bab31, type: 3}
+  m_Volume: 0
+  m_Enabled: 1
