@@ -7,8 +7,8 @@ using Random = UnityEngine.Random;
 
 public class MonsterAI : MonoBehaviour
 {
-    [Header("Variables & References")] 
-    [SerializeField] GameObject player;
+    [Header("Variables & References")] [SerializeField]
+    GameObject player;
 
     [SerializeField] MonsterNoises noises;
 
@@ -18,9 +18,16 @@ public class MonsterAI : MonoBehaviour
     [SerializeField] float hidingDistanceMinimum = 20f;
     [SerializeField] float hidingDistanceMaximum = 40f;
     [SerializeField] float distanceFromPlayer;
-    [Tooltip("The higher this number is the lower the chance is")][SerializeField] int chanceToEndHunt = 5;
-    [Tooltip("The higher this number is the lower the chance is")][SerializeField] int chanceToEndHiding = 3;
-    [Tooltip("The higher this number is the lower the chance is")][SerializeField] int chanceToEndStalking = 2;
+
+    [Tooltip("The higher this number is the lower the chance is")] [SerializeField]
+    int chanceToEndHunt = 5;
+
+    [Tooltip("The higher this number is the lower the chance is")] [SerializeField]
+    int chanceToEndHiding = 3;
+
+    [Tooltip("The higher this number is the lower the chance is")] [SerializeField]
+    int chanceToEndStalking = 2;
+
     [SerializeField] bool activePath;
     [SerializeField] bool pathPending;
     [SerializeField] float defaultStalkDistance = 15f;
@@ -40,9 +47,12 @@ public class MonsterAI : MonoBehaviour
     float pathTimer;
     float changeCooldown;
     [SerializeField] float currentHunt;
+
     NavMeshAgent agent;
+
     //States
-    [Serializable]public struct Mode
+    [Serializable]
+    public struct Mode
     {
         public static bool Hunting;
         public static bool Hiding;
@@ -52,6 +62,7 @@ public class MonsterAI : MonoBehaviour
     [SerializeField] bool hunting;
     [SerializeField] bool hiding;
     [SerializeField] bool stalking;
+
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -62,82 +73,86 @@ public class MonsterAI : MonoBehaviour
 
     void React(bool tooClose)
     {
-         if (Mode.Hiding && !agent.hasPath)
-         {
-             HideBehaviour();
-         }
-         else if (tooClose || Mode.Hunting)
-         {
-             agent.speed = math.clamp(agent.speed + huntSpeedBoost, 10, 15);
-             //animator.SetBool("isRunning", true);
-             Mode.Hiding = false;
-             Mode.Stalking = false;
-             Mode.Hunting = true;
-             if (!soundPlayedThisHunt)
-                 currentHunt = maxHuntTimer;
-         }
+        if (Mode.Hiding)
+        {
+            HideBehaviour();
+        }
+        else if (tooClose || Mode.Hunting)
+        {
+            agent.speed = math.clamp(agent.speed + huntSpeedBoost, 10, 15);
+            //animator.SetBool("isRunning", true);
+            Mode.Hiding = false;
+            Mode.Stalking = false;
+            Mode.Hunting = true;
+            if (!soundPlayedThisHunt)
+                currentHunt = maxHuntTimer;
+        }
 
-         //else if (Mode.Stalking && !agent.hasPath)
-         //{
-         //    StalkBehaviour();
-         //}
-         //else
-         {
-             EnterRandomMode();
-         }
-    }
-    private void HideBehaviour()
-    {
-        if (pathPending)
-            return;
-        //Current version has a chance that the hiding spot makes a path that leads right past the player, could affect scariness of monster
-        Vector3 hidingPoint =
-            new Vector3(player.transform.position.x + Random.Range(hidingDistanceMinimum, hidingDistanceMaximum), 0, player.transform.position.z + Random.Range(hidingDistanceMinimum, hidingDistanceMaximum));
-        hidingPoint = ReturnPointWithAccurateHeight(hidingPoint);
-        //animator.SetBool("isMoving", true);
-        agent.SetDestination(hidingPoint);
-        pathPending = true;
-        hasGainedNewDestination = true;
-        if (Random.Range(1, math.clamp(chanceToEndHiding - destinationsReachedInCurrentMode, 1, chanceToEndHiding)) == 1)
+        //else if (Mode.Stalking && !agent.hasPath)
+        //{
+        //    StalkBehaviour();
+        //}
+        //else
         {
             EnterRandomMode();
         }
     }
-    
 
-  //private void StalkBehaviour()
-  //{
-  //    if (pathPending)
-  //        return;
-  //    Vector3 playerPos = player.transform.position;
+    private void HideBehaviour()
+    {
+        if (agent.pathPending)
+            return;
+        //Current version has a chance that the hiding spot makes a path that leads right past the player, could affect scariness of monster
+        Vector3 hidingPoint =
+            new Vector3(player.transform.position.x + Random.Range(hidingDistanceMinimum, hidingDistanceMaximum), 0,
+                player.transform.position.z + Random.Range(hidingDistanceMinimum, hidingDistanceMaximum));
+        hidingPoint = ReturnPointWithAccurateHeight(hidingPoint);
+        //animator.SetBool("isMoving", true);
+        agent.SetDestination(hidingPoint);
+        pathPending = true;
+        if (Random.Range(1, math.clamp(chanceToEndHiding - destinationsReachedInCurrentMode, 1, chanceToEndHiding)) ==
+            1)
+        {
+            EnterRandomMode();
+        }
+    }
 
-  //    Vector3 waypoint = ReturnPointAroundPlayer(playerPos, Random.Range(0, 360), stalkDistance);
-  //    waypoint = ReturnPointWithAccurateHeight(waypoint);
-  //    agent.SetDestination(waypoint);
-  //    pathPending = true;
-  //    stalkDistance = math.clamp(stalkDistance / divideStalkDistanceByXPerWaypoint, 5, stalkDistance);
-  //    hasGainedNewDestination = true;
-  //    if (destinationsReachedInCurrentMode > 2)
-  //    {
-  //        if (Random.Range(1, math.clamp(chanceToEndStalking - destinationsReachedInCurrentMode, 1, chanceToEndStalking)) == 1)
-  //        {
-  //            EnterRandomMode();
-  //        }
-  //    }
-  //}
+
+    //private void StalkBehaviour()
+    //{
+    //    if (pathPending)
+    //        return;
+    //    Vector3 playerPos = player.transform.position;
+
+    //    Vector3 waypoint = ReturnPointAroundPlayer(playerPos, Random.Range(0, 360), stalkDistance);
+    //    waypoint = ReturnPointWithAccurateHeight(waypoint);
+    //    agent.SetDestination(waypoint);
+    //    pathPending = true;
+    //    stalkDistance = math.clamp(stalkDistance / divideStalkDistanceByXPerWaypoint, 5, stalkDistance);
+    //    hasGainedNewDestination = true;
+    //    if (destinationsReachedInCurrentMode > 2)
+    //    {
+    //        if (Random.Range(1, math.clamp(chanceToEndStalking - destinationsReachedInCurrentMode, 1, chanceToEndStalking)) == 1)
+    //        {
+    //            EnterRandomMode();
+    //        }
+    //    }
+    //}
 
     private Vector3 ReturnPointWithAccurateHeight(Vector3 pointToCheck)
     {
         Physics.Raycast(new Vector3(pointToCheck.x, 20, pointToCheck.z), Vector3.down, out RaycastHit hit, 30f,
             groundLayerMask);
-        Debug.DrawRay(new Vector3(pointToCheck.x, 20, pointToCheck.z), Vector3.down*30, Color.yellow, 20);
+        Debug.DrawRay(new Vector3(pointToCheck.x, 20, pointToCheck.z), Vector3.down * 30, Color.yellow, 20);
         return hit.point;
     }
+
     private Vector3 ReturnPointAroundPlayer(Vector3 pointToRotateAround, float angle, float radius)
     {
         return new Vector3(pointToRotateAround.x + (math.cos(angle) * radius), pointToRotateAround.y,
             pointToRotateAround.z + (math.sin(angle) * radius));
     }
+
     private void EnterRandomMode()
     {
         if ((Mode.Hiding || Mode.Hunting) && changeCooldown > 0)
@@ -173,13 +188,23 @@ public class MonsterAI : MonoBehaviour
                 Mode.Hunting = true;
                 hunting = true;
                 if (!soundPlayedThisHunt)
-                     currentHunt = maxHuntTimer;
+                    currentHunt = maxHuntTimer;
                 noises.StartHuntAmbience();
                 break;
-           // case 2:
-           //     Mode.Stalking = true;
-           //     stalking = true;
-           //     break;
+            case 2:
+                Mode.Hiding = true;
+                hiding = true;
+                noises.EndHuntAmbience();
+                break;
+            case 3:
+                Mode.Hiding = true;
+                hiding = true;
+                noises.EndHuntAmbience();
+                break;
+            // case 2:
+            //     Mode.Stalking = true;
+            //     stalking = true;
+            //     break;
             default:
                 Mode.Hunting = true;
                 hunting = true;
@@ -192,6 +217,7 @@ public class MonsterAI : MonoBehaviour
             React(false);
         }
     }
+
     void Update()
     {
         currentHunt = currentHunt - Time.deltaTime;
@@ -206,6 +232,7 @@ public class MonsterAI : MonoBehaviour
                 agent.ResetPath();
                 EnterRandomMode();
             }
+
             //nimator.SetBool("isMoving", true);
             if (!soundPlayedThisHunt)
             {
@@ -219,7 +246,6 @@ public class MonsterAI : MonoBehaviour
         agent.autoBraking = false;
         if (StickActive)
         {
-
             if (StickPosition == null)
                 return;
             agent.autoBraking = true;
@@ -240,25 +266,27 @@ public class MonsterAI : MonoBehaviour
 
             return;
         }
+
         changeCooldown = changeCooldown - Time.deltaTime;
         pathTimer = pathTimer - Time.deltaTime;
         distanceFromPlayer = Vector3.Distance(transform.position, player.transform.position);
         activePath = agent.hasPath;
-        
+
         if (distanceFromPlayer < reactionRange && changeCooldown <= 0)
         {
             Debug.Log("Player too close, hunting");
             agent.ResetPath();
             React(true);
         }
+
         if (pathTimer <= 0 && !agent.hasPath && !agent.pathPending)
         {
             pathPending = false;
             React(false);
             pathTimer = pathUpdateTimer;
-            
         }
-        if (agent.remainingDistance <= agent.stoppingDistance && hasGainedNewDestination)
+
+        if (agent.remainingDistance <= agent.stoppingDistance && !agent.pathPending)
         {
             hasGainedNewDestination = false;
             agent.destination = transform.position;
@@ -266,6 +294,5 @@ public class MonsterAI : MonoBehaviour
             pathPending = false;
             destinationsReachedInCurrentMode++;
         }
-
     }
 }
